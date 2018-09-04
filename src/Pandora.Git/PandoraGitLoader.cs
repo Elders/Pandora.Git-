@@ -6,6 +6,12 @@ namespace Pandora.Git
 {
     public class PandoraGitLoader
     {
+        /// <summary>
+        /// Clones the repository needed and then loads the needed configurations in the Pandora object
+        /// </summary>
+        /// <param name="applicationName">The name of the file with jars in it</param>
+        /// <param name="gitSettings">The general git settings needed to clone</param>
+        /// <param name="options">Options to get environment specific configurations</param>
         public PandoraGitLoader(string applicationName, GitSettings gitSettings, PandoraOptions options)
         {
             string pattern = $"{applicationName}.json";
