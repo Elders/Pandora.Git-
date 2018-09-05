@@ -1,12 +1,64 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFrameworks>netstandard2.0;net45;net451;net452;net46;net461;net462;net472</TargetFrameworks>
+  </PropertyGroup>
+
+  <!--Nuget-->
+  <PropertyGroup>
+    <PackageId>Pandora.Git</PackageId>
+    <Product>Pandora</Product>
+    <Title>Pandora</Title>
+    <Authors>Elders OSS</Authors>
+    <Copyright>Copyright © Elders OSS 2013</Copyright>
+    <Description>Pandora allows external configuration for your projects</Description>
+    <PackageTags>Configuration Json Environment Environments Staging Production Dev Local</PackageTags>
+    <PackageLicenseUrl>https://github.com/Elders/Pandora/blob/master/LICENSE</PackageLicenseUrl>
+    <PackageProjectUrl>http://Elders.github.io/Pandora</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/Elders/Pandora.Git-.git</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageIconUrl>https://raw.githubusercontent.com/Elders/logo/master/pandora/black.png</PackageIconUrl>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <AssemblyName>Elders.Pandora.Git</AssemblyName>
+    <NeutralLanguage>en-US</NeutralLanguage>
+  </PropertyGroup>
+
+  <!--Global Dependencies-->
+  <ItemGroup>
+    <PackageReference Include="Pandora" Version="1.0.0-beta0002" />
+  </ItemGroup>
+
+  <!--netstandard2.0-->
+  <PropertyGroup Condition="'$(TargetFramework)'=='netstandard2.0'">
+    <DefineConstants>TRACE;DEBUG;NETSTANDARD2_0</DefineConstants>
+  </PropertyGroup>
+  <ItemGroup Condition="'$(TargetFramework)'=='netstandard2.0'">
+    <PackageReference Include="LibGit2Sharp" Version="0.25.2" />
+  </ItemGroup>
+
+  <!--NETFULL-->
+  <PropertyGroup Condition="'$(TargetFramework)'!='netstandard2.0'">
+    <DefineConstants>TRACE;DEBUG;NETFULL</DefineConstants>
+  </PropertyGroup>
+  <ItemGroup Condition="'$(TargetFramework)'!='netstandard2.0'">
+    <PackageReference Include="LibGit2Sharp" Version="0.24.1" />
+  </ItemGroup>
+
+  <!--Debug Symbols-->
+  <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
+    <DebugType>portable</DebugType>
+    <DebugSymbols>true</DebugSymbols>
+    <EmbedSources>true</EmbedSources>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)' == 'Release'">
+    <DebugType>portable</DebugType>
+    <DebugSymbols>true</DebugSymbols>
+    <EmbedSources>true</EmbedSources>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="LibGit2Sharp" Version="0.25.2" />
-    <PackageReference Include="Pandora" Version="0.9.0" />
+    <PackageReference Include="SourceLink.Create.CommandLine" Version="2.8.3" PrivateAssets="All" />
   </ItemGroup>
 
 </Project>
