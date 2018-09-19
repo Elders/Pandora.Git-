@@ -1,3 +1,6 @@
+#### 0.1.4 - 19.09.2018
+* Fixes IPandoraGitSettings dependency
+
 #### 0.1.3 - 19.09.2018
 * Renames PandoraGitLoader to PandoraGitFactory which now implements IPandoraFactory
 
