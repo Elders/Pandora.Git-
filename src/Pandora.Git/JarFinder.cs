@@ -7,12 +7,12 @@ namespace Pandora.Git
 {
     public class JarFinder
     {
-        private readonly GitSettings gitSettings;
+        private readonly IPandoraGitSettings _gitSettings;
         private readonly string _checkoutDir;
 
-        public JarFinder(GitSettings gitSettings)
+        public JarFinder(IPandoraGitSettings gitSettings)
         {
-            this.gitSettings = gitSettings;
+            this._gitSettings = gitSettings;
             var cloneOptions = new LibGit2Sharp.CloneOptions
             {
 

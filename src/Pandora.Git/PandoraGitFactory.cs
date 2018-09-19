@@ -10,7 +10,7 @@ namespace Pandora.Git
         object refreshPandora = new object();
 
         private readonly IPandoraContext _context;
-        private readonly GitSettings _gitSettings;
+        private readonly IPandoraGitSettings _gitSettings;
         private IConfigurationRepository _configurationRepository;
 
         /// <summary>
@@ -19,7 +19,7 @@ namespace Pandora.Git
         /// <param name="applicationName">The name of the file with jars in it</param>
         /// <param name="gitSettings">The general git settings needed to clone</param>
         /// <param name="options">Options to get environment specific configurations</param>
-        public PandoraGitFactory(IPandoraContext context, GitSettings gitSettings)
+        public PandoraGitFactory(IPandoraContext context, IPandoraGitSettings gitSettings)
         {
             if (context is null) throw new ArgumentNullException(nameof(context));
             if (gitSettings is null) throw new ArgumentNullException(nameof(gitSettings));
