@@ -1,3 +1,6 @@
+#### 0.1.5 - 19.09.2018
+* Fixes IPandoraGitSettings dependency
+
 #### 0.1.4 - 19.09.2018
 * Fixes IPandoraGitSettings dependency
 
