@@ -29,7 +29,15 @@ namespace Pandora.Git
                 })
             };
 
-            _checkoutDir = LibGit2Sharp.Repository.Clone(gitSettings.SourceUrl, gitSettings.WorkingDir, cloneOptions);
+            try
+            {
+                _checkoutDir = LibGit2Sharp.Repository.Clone(gitSettings.SourceUrl, gitSettings.WorkingDir, cloneOptions);
+            }
+            catch (LibGit2Sharp.LibGit2SharpException ex)
+            {
+                Exception error = new Exception("Unable to checkout repository. Please check the credentials", ex);
+                throw error;
+            }
         }
 
         public JarFindResult FindJar()
