@@ -3,8 +3,13 @@ using System.IO;
 
 namespace Pandora.Git
 {
-    public class GitSettings
+    public class GitSettings : IPandoraGitSettings
     {
+        internal GitSettings()
+        {
+
+        }
+
         /// <summary>
         /// The constructor for the basic settings to make git work
         /// </summary>
@@ -14,7 +19,6 @@ namespace Pandora.Git
         /// <param name="password">The password is needed if the repository is private</param>
         public GitSettings(string sourceUrl, string workingDir = ".pandora", string username = "", string password = "")
         {
-            if (string.IsNullOrEmpty(workingDir)) throw new ArgumentNullException(nameof(workingDir));
             if (string.IsNullOrEmpty(sourceUrl)) throw new ArgumentNullException(nameof(sourceUrl));
 
             SourceUrl = sourceUrl;
@@ -23,9 +27,24 @@ namespace Pandora.Git
             Password = password;
         }
 
-        public string SourceUrl { get; private set; }
-        public string WorkingDir { get; private set; }
-        public string Username { get; private set; }
-        public string Password { get; private set; }
+        public string SourceUrl { get; protected set; }
+        public string WorkingDir { get; protected set; }
+        public string Username { get; protected set; }
+        public string Password { get; protected set; }
+    }
+
+    public class GitSettingsFromEnvironmentVariables : GitSettings
+    {
+        public GitSettingsFromEnvironmentVariables()
+        {
+            SourceUrl = Environment.GetEnvironmentVariable("pandora_git_url");
+            if (string.IsNullOrEmpty(SourceUrl)) throw new ArgumentNullException(nameof(SourceUrl));
+
+            string workingDir = Environment.GetEnvironmentVariable("pandora_git_workingdir") ?? ".pandora";
+            WorkingDir = Path.Combine(workingDir, DateTime.UtcNow.ToString("yyyyMMddhhmmss"));
+
+            Username = Environment.GetEnvironmentVariable("pandora_git_username") ?? string.Empty;
+            Password = Environment.GetEnvironmentVariable("pandora_git_password") ?? string.Empty;
+        }
     }
 }
