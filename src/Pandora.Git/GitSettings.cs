@@ -28,6 +28,7 @@ namespace Pandora.Git
         }
 
         public string SourceUrl { get; protected set; }
+        public string JarsLocation { get; protected set; }
         public string WorkingDir { get; protected set; }
         public string Username { get; protected set; }
         public string Password { get; protected set; }
@@ -42,6 +43,8 @@ namespace Pandora.Git
 
             string workingDir = Environment.GetEnvironmentVariable("pandora_git_workingdir") ?? ".pandora";
             WorkingDir = Path.Combine(workingDir, DateTime.UtcNow.ToString("yyyyMMddhhmmss"));
+
+            JarsLocation = Environment.GetEnvironmentVariable("pandora_git_jars");
 
             Username = Environment.GetEnvironmentVariable("pandora_git_username") ?? string.Empty;
             Password = Environment.GetEnvironmentVariable("pandora_git_password") ?? string.Empty;
