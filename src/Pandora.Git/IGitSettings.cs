@@ -2,6 +2,7 @@
 {
     public interface IPandoraGitSettings
     {
+        string JarsLocation { get; }
         string Password { get; }
         string SourceUrl { get; }
         string Username { get; }

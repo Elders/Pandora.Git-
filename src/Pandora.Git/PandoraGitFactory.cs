@@ -34,49 +34,21 @@ namespace Pandora.Git
         {
             lock (refreshPandora)
             {
-                string pattern = $"{_context.ApplicationName}.json";
-                Jar = new JarFinder(_gitSettings).FindJar(pattern);
-                Box box = Box.Mistranslate(Jar);
-                var opener = new PandoraBoxOpener(box);
-                Directory.SetCurrentDirectory(Path.Combine(Directory.GetCurrentDirectory(), _gitSettings.WorkingDir));
+                using (var jarFinder = new JarFinder(_gitSettings, _context))
+                {
+                    var jarFindResult = jarFinder.FindJar();
 
-                PandoraOptions options = new PandoraOptions(_context.Cluster, _context.Machine);
-                Configuration cfg = opener.Open(options);
-                string directoryToDelete = Directory.GetCurrentDirectory();
-                Directory.SetCurrentDirectory(Directory.GetParent(directoryToDelete).ToString());
-                DeleteDirectory(directoryToDelete);
-
-                _configurationRepository = new GitConfigurationRepo(cfg);
+                    Directory.SetCurrentDirectory(jarFindResult.JarLocation.FullName);
+                    Box box = Box.Mistranslate(jarFindResult.Jar);
+                    var opener = new PandoraBoxOpener(box);
+                    PandoraOptions options = new PandoraOptions(_context.Cluster, _context.Machine);
+                    Configuration cfg = opener.Open(options);
+                    _configurationRepository = new GitConfigurationRepo(cfg);
+                }
             }
         }
 
         public Jar Jar { get; private set; }
-
-        void DeleteDirectory(string directoryPath)
-        {
-            if (!Directory.Exists(directoryPath))
-            {
-                return;
-            }
-
-            var files = Directory.GetFiles(directoryPath);
-            var directories = Directory.GetDirectories(directoryPath);
-
-            foreach (var file in files)
-            {
-                File.SetAttributes(file, FileAttributes.Normal);
-                File.Delete(file);
-            }
-
-            foreach (var dir in directories)
-            {
-                DeleteDirectory(dir);
-            }
-
-            File.SetAttributes(directoryPath, FileAttributes.Normal);
-
-            Directory.Delete(directoryPath, false);
-        }
 
         public IPandoraContext GetContext()
         {
