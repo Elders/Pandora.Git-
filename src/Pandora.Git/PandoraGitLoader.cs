@@ -1,33 +1,53 @@
 ﻿using Elders.Pandora;
 using Elders.Pandora.Box;
+using System;
 using System.IO;
 
 namespace Pandora.Git
 {
     public class PandoraGitLoader
     {
+        object refreshPandora = new object();
+
+        private readonly IPandoraContext _context;
+        private readonly GitSettings _gitSettings;
+
         /// <summary>
         /// Clones the repository needed and then loads the needed configurations in the Pandora object
         /// </summary>
         /// <param name="applicationName">The name of the file with jars in it</param>
         /// <param name="gitSettings">The general git settings needed to clone</param>
         /// <param name="options">Options to get environment specific configurations</param>
-        public PandoraGitLoader(string applicationName, GitSettings gitSettings, PandoraOptions options)
+        public PandoraGitLoader(IPandoraContext context, GitSettings gitSettings)
         {
-            string pattern = $"{applicationName}.json";
-            Jar = new JarFinder(gitSettings).FindJar(pattern);
-            Box box = Box.Mistranslate(Jar);
-            var opener = new PandoraBoxOpener(box);
-            Directory.SetCurrentDirectory(Path.Combine(Directory.GetCurrentDirectory(), gitSettings.WorkingDir));
+            if (context is null) throw new ArgumentNullException(nameof(context));
+            if (gitSettings is null) throw new ArgumentNullException(nameof(gitSettings));
 
-            Configuration cfg = opener.Open(options);
-            string directoryToDelete = Directory.GetCurrentDirectory();
-            Directory.SetCurrentDirectory(Directory.GetParent(directoryToDelete).ToString());
-            DeleteDirectory(directoryToDelete);
+            _context = context;
+            _gitSettings = gitSettings;
 
-            var cfgRepo = new GitConfigurationRepo(cfg);
-            var appContext = new ApplicationContext(applicationName, options.ClusterName, options.MachineName);
-            Pandora = new Elders.Pandora.Pandora(appContext, cfgRepo);
+            Refresh();
+        }
+
+        public void Refresh()
+        {
+            lock (refreshPandora)
+            {
+                string pattern = $"{_context.ApplicationName}.json";
+                Jar = new JarFinder(_gitSettings).FindJar(pattern);
+                Box box = Box.Mistranslate(Jar);
+                var opener = new PandoraBoxOpener(box);
+                Directory.SetCurrentDirectory(Path.Combine(Directory.GetCurrentDirectory(), _gitSettings.WorkingDir));
+
+                PandoraOptions options = new PandoraOptions(_context.Cluster, _context.Machine);
+                Configuration cfg = opener.Open(options);
+                string directoryToDelete = Directory.GetCurrentDirectory();
+                Directory.SetCurrentDirectory(Directory.GetParent(directoryToDelete).ToString());
+                DeleteDirectory(directoryToDelete);
+
+                var cfgRepo = new GitConfigurationRepo(cfg);
+                Pandora = new Elders.Pandora.Pandora(_context, cfgRepo);
+            }
         }
 
         public Elders.Pandora.Pandora Pandora { get; private set; }
