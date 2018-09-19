@@ -5,12 +5,13 @@ using System.IO;
 
 namespace Pandora.Git
 {
-    public class PandoraGitLoader
+    public class PandoraGitFactory : IPandoraFactory
     {
         object refreshPandora = new object();
 
         private readonly IPandoraContext _context;
         private readonly GitSettings _gitSettings;
+        private IConfigurationRepository _configurationRepository;
 
         /// <summary>
         /// Clones the repository needed and then loads the needed configurations in the Pandora object
@@ -18,7 +19,7 @@ namespace Pandora.Git
         /// <param name="applicationName">The name of the file with jars in it</param>
         /// <param name="gitSettings">The general git settings needed to clone</param>
         /// <param name="options">Options to get environment specific configurations</param>
-        public PandoraGitLoader(IPandoraContext context, GitSettings gitSettings)
+        public PandoraGitFactory(IPandoraContext context, GitSettings gitSettings)
         {
             if (context is null) throw new ArgumentNullException(nameof(context));
             if (gitSettings is null) throw new ArgumentNullException(nameof(gitSettings));
@@ -45,12 +46,9 @@ namespace Pandora.Git
                 Directory.SetCurrentDirectory(Directory.GetParent(directoryToDelete).ToString());
                 DeleteDirectory(directoryToDelete);
 
-                var cfgRepo = new GitConfigurationRepo(cfg);
-                Pandora = new Elders.Pandora.Pandora(_context, cfgRepo);
+                _configurationRepository = new GitConfigurationRepo(cfg);
             }
         }
-
-        public Elders.Pandora.Pandora Pandora { get; private set; }
 
         public Jar Jar { get; private set; }
 
@@ -78,6 +76,16 @@ namespace Pandora.Git
             File.SetAttributes(directoryPath, FileAttributes.Normal);
 
             Directory.Delete(directoryPath, false);
+        }
+
+        public IPandoraContext GetContext()
+        {
+            return _context;
+        }
+
+        public IConfigurationRepository GetConfiguration()
+        {
+            return _configurationRepository;
         }
     }
 }
