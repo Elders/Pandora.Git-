@@ -1,3 +1,6 @@
+#### 0.1.6 - 20.09.2018
+* Updates pandora package 
+
 #### 0.1.5 - 19.09.2018
 * Fixes IPandoraGitSettings dependency
 
