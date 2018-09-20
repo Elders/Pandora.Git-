@@ -25,7 +25,7 @@
 
   <!--Global Dependencies-->
   <ItemGroup>
-    <PackageReference Include="Pandora" Version="1.0.0-beta0004" />
+    <PackageReference Include="Pandora" Version="1.0.0-beta0005" />
   </ItemGroup>
 
   <!--netstandard2.0-->

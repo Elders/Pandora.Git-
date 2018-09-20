@@ -7,12 +7,14 @@ namespace Pandora.Git
 {
     public sealed class GitConfigurationRepo : IConfigurationRepository
     {
+        private readonly IPandoraContext context;
         private readonly Configuration _cfg;
 
-        public GitConfigurationRepo(Configuration pandoraConfiguration)
+        public GitConfigurationRepo(IPandoraContext context, Configuration pandoraConfiguration)
         {
             if (pandoraConfiguration is null) throw new ArgumentNullException(nameof(pandoraConfiguration));
 
+            this.context = context;
             _cfg = pandoraConfiguration;
         }
 
@@ -31,8 +33,21 @@ namespace Pandora.Git
             return string.Empty;
         }
 
-        public IEnumerable<DeployedSetting> GetAll(EnvironmentVariableTarget target = EnvironmentVariableTarget.Machine) { throw new NotSupportedException(); }
+        public IEnumerable<DeployedSetting> GetAll()
+        {
+            foreach (var setting in _cfg.AsDictionary())
+            {
+                Key key = Key.Parse(setting.Key);
+                yield return new DeployedSetting(
+                        raw: setting.Key,
+                        applicationName: context.ApplicationName,
+                        cluster: context.Cluster,
+                        machine: context.Machine,
+                        settingKey: key.SettingKey,
+                        value: setting.Value.ToString());
+            }
+        }
 
-        public void Set(string key, string value, EnvironmentVariableTarget target = EnvironmentVariableTarget.Machine) { throw new NotSupportedException(); }
+        public void Set(string key, string value) { throw new NotSupportedException(); }
     }
 }

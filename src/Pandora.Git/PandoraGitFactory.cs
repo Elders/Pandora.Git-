@@ -43,7 +43,7 @@ namespace Pandora.Git
                     var opener = new PandoraBoxOpener(box);
                     PandoraOptions options = new PandoraOptions(_context.Cluster, _context.Machine);
                     Configuration cfg = opener.Open(options);
-                    _configurationRepository = new GitConfigurationRepo(cfg);
+                    _configurationRepository = new GitConfigurationRepo(_context, cfg);
                 }
             }
         }
