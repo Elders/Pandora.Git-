@@ -31,8 +31,8 @@ namespace Pandora.Git
             return string.Empty;
         }
 
-        public IEnumerable<DeployedSetting> GetAll() { throw new NotSupportedException(); }
+        public IEnumerable<DeployedSetting> GetAll(EnvironmentVariableTarget target = EnvironmentVariableTarget.Machine) { throw new NotSupportedException(); }
 
-        public void Set(string key, string value) { throw new NotSupportedException(); }
+        public void Set(string key, string value, EnvironmentVariableTarget target = EnvironmentVariableTarget.Machine) { throw new NotSupportedException(); }
     }
 }
