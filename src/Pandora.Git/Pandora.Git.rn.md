@@ -1,3 +1,6 @@
+#### 0.1.8 - 21.09.2018
+* Updates pandora package again
+
 #### 0.1.7 - 20.09.2018
 * Updates pandora package again 
 
