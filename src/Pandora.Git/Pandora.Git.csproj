@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.0;net45;net451;net452;net46;net461;net462;net472</TargetFrameworks>
+    <TargetFrameworks>netstandard2.0;net472</TargetFrameworks>
   </PropertyGroup>
 
   <!--Nuget-->
@@ -25,7 +25,8 @@
 
   <!--Global Dependencies-->
   <ItemGroup>
-    <PackageReference Include="Pandora" Version="1.0.0-beta0005" />
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="2.1.1" />
+    <PackageReference Include="Pandora" Version="1.0.0-beta0006" />
   </ItemGroup>
 
   <!--netstandard2.0-->
