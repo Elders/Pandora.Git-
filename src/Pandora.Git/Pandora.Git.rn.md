@@ -1,3 +1,6 @@
+#### 0.1.9 - 12.12.2019
+* Fixes exception on deletion for directory
+
 #### 0.1.8 - 25.09.2018
 * Updates pandora package again
 
