@@ -1,3 +1,6 @@
+#### 0.1.10 - 12.12.2019
+* Starts swallowing exceptions on Clean
+
 #### 0.1.9 - 12.12.2019
 * Fixes exception on deletion for directory
 
