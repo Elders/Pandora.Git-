@@ -87,7 +87,18 @@ namespace Pandora.Git
 
             File.SetAttributes(directoryPath, FileAttributes.Normal);
 
-            Directory.Delete(directoryPath, false);
+            try
+            {
+                Directory.Delete(directoryPath, true);
+            }
+            catch (IOException)
+            {
+                Directory.Delete(directoryPath, true);
+            }
+            catch (UnauthorizedAccessException)
+            {
+                Directory.Delete(directoryPath, true);
+            }
         }
 
         public void Dispose()
