@@ -58,10 +58,18 @@ namespace Pandora.Git
 
         void Clean()
         {
-            var dirToDelete = new DirectoryInfo(_checkoutDir).Parent.Parent;
-            string workingDir = dirToDelete.Parent.FullName;
-            Directory.SetCurrentDirectory(workingDir);
-            DeleteDirectory(dirToDelete.FullName);
+            try
+            {
+                var dirToDelete = new DirectoryInfo(_checkoutDir).Parent.Parent;
+                string workingDir = dirToDelete.Parent.FullName;
+                Directory.SetCurrentDirectory(workingDir);
+
+                DeleteDirectory(dirToDelete.FullName);
+            }
+            catch (Exception)
+            {
+                // We will swallow any exceptions that arise, since this should not break startups that use these configurations. Currenlt, Windows.Filesystem throws on random occasions exceptions (UnauthorizedAccessException)}
+            }
         }
 
         void DeleteDirectory(string directoryPath)
